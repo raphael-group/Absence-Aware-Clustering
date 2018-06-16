@@ -1,0 +1,4 @@
+concentration:
+  # Initial value if prior is set, or fixed value otherwise for concentration parameter.
+  value: 0.00000001
+

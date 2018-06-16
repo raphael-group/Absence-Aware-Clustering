@@ -1,0 +1,126 @@
+###
+#   Clustering
+###
+
+outdir=config['outdir']
+density="pyclone_beta_binomial"
+
+rule all:
+    input:
+        outdir + "cluster_assignments.txt",
+        #outdir + "/partition.tsv",
+        #outdir + "/input_filelist.tsv",
+        #outdir + "/pyclone/output_filelist.txt",
+
+rule clean:
+    params:
+        outdir=config['outdir']
+    shell:
+        """
+
+            echo '!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!'
+            echo 'Remove results directory: {params.outdir}'
+            echo 'The following content will be removed:'
+            ls -l {params.outdir}
+            echo 'Are you sure you want to delete this directory?'
+            echo '!!!!!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!!!'
+            rm -rI  {params.outdir}
+        """
+        
+
+rule partition:
+    input:
+        config['input']
+    output:
+        "{outdir}/partition.tsv"
+    shell:
+        "python partition.py {input} {output}"
+
+
+rule create_input:
+    input:
+        input=config['input'],
+        partition="{outdir}/partition.tsv"
+    output:
+        "{outdir}/input_filelist.tsv"
+    threads:
+        30
+    shell:
+	    """        
+		profiles=`cat {input.partition} | awk -F '\t' 'NR>1{{print $2}}' | sort | uniq`
+		samples=`cat {input.input} | awk -F '\t' 'NR>4{{print $1}}' | sort | uniq`
+	
+		function create_profiles 
+		{{
+                profile=$1
+                sample=$2
+		        python create_clustering_input.py {input.input} {input.partition} $profile $sample {wildcards.outdir} 
+		}}
+        export -f create_profiles
+
+        for profile in $profiles; do
+		        if [ ! -d {wildcards.outdir}/$profile ]; then
+		            mkdir {wildcards.outdir}/$profile
+		        fi
+        done
+
+
+	    parallel create_profiles ::: $profiles ::: $samples
+
+        for profile in $profiles; do
+            for sample in $samples; do
+                fname={wildcards.outdir}/$profile/input.$sample.tsv
+                if [ -f $fname ]; then
+                    echo $fname >> {output} 
+                fi
+            done
+        done
+        
+        """
+
+rule run_pyclone:
+    input:
+        filelist="{outdir}/input_filelist.tsv",
+        partition="{outdir}/partition.tsv"
+    output:
+        "{outdir}/output_filelist.txt"
+    threads: 30
+    shell:
+        """
+	    function run_pyclone()
+	    {{
+            profile=$1
+            echo $profile
+            echo {input.filelist}
+
+            files=`grep $profile {input.filelist}`
+	        nvalues=`echo $files | head -1 | xargs cat | wc -l`
+	        if [[ $nvalues -gt 2 ]]; then
+	            bash run_pyclone.sh $profile {wildcards.outdir} {input.filelist} 
+	        else
+	            python create_singleton_cluster.py {wildcards.outdir} $profile $files
+	        fi
+
+           
+	    }}
+        export -f run_pyclone
+
+		profiles=`cat {input.partition} | awk -F '\t' 'NR>1{{print $2}}' | sort | uniq`
+        parallel -j {threads} run_pyclone ::: $profiles
+        
+        for profile in $profiles;
+        do
+            echo {outdir}/$profile/result.txt >> {output}
+        done
+        
+	    """
+
+rule merge_files:
+    input:
+        pyclone_out="{outdir}/output_filelist.txt",
+        input = config['input']
+    output:
+        "{outdir}/cluster_assignments.txt"
+    shell:
+        "python process_clusters.py {input.input} `cat {input.pyclone_out}` > {output}"
+
