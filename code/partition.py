@@ -8,6 +8,11 @@ def pr_x(X, V, T, lam, eps):
     if X == 0:
         return (1-lam)*binom.pmf(V,T, eps)
     elif X == 1:
+        b = binom_coeff(T,V)
+        
+        if b == float('inf'): return float('inf')
+        #bt = beta(1+V, 1+T-V)
+        #print b, bt
         return lam * binom_coeff(T,V) * beta(1+V, 1+T-V)
     else:
         raise ValueError("X must be 0 or 1.")
@@ -18,8 +23,12 @@ def norm_pr_x(v, depth, lam, eps):
     Returns a tuple corresponding to the probability that x = 1,
     and the probablity that x = 0
     """
+
     p0 = pr_x(0, v, depth, lam, eps)
     p1 = pr_x(1, v, depth, lam, eps)
+
+    if p1 == float('inf'):
+        return 0, 1
     return p0/(p0 + p1), p1/(p0 + p1)
 
 def partition_data(df, lam, eps, samples):
@@ -40,7 +49,10 @@ def partition_data(df, lam, eps, samples):
         return "p-"+profile
 
     
+   
+    
     df_output['profile'] = df_output.apply(get_profile, axis=1)
+    
     return df_output[['character_index', 'profile']]
 
 if len(sys.argv) != 3:
