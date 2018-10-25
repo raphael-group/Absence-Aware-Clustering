@@ -94,7 +94,10 @@ rule run_pyclone:
             echo {input.filelist}
 
             files=`grep $profile {input.filelist}`
-	        nvalues=`echo $files | head -1 | xargs cat | wc -l`
+			first_file=`grep -m1 $profile {input.filelist}`
+	        #nvalues=`echo $first_file | head -1 | xargs cat | awk 'length($0) > 0' | wc -l`
+			nvalues=`cat $first_file | awk 'length($0) > 0' | wc -l`
+			echo $nvalues
 	        if [[ $nvalues -gt 2 ]]; then
 	            bash run_pyclone.sh $profile {wildcards.outdir} {input.filelist} 
 	        else
@@ -110,7 +113,7 @@ rule run_pyclone:
         
         for profile in $profiles;
         do
-            echo {outdir}/$profile/result.txt >> {output}
+            echo {outdir}/$profile/results.txt >> {output}
         done
         
 	    """
