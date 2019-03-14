@@ -9,6 +9,7 @@ then merges the resulting set of clusters.
 - snakemake
 - python2
 - pyclone
+- gnu parallel
 
 ## Basic example
 
