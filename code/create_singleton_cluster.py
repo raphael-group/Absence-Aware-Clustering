@@ -1,7 +1,7 @@
 import sys
 
 if len(sys.argv) < 4:
-    print "Usage: {} [Output Directory] [Profile] [List of Input Files]"
+    print "Usage: {} [Output Directory] [Profile] [List of Input Files]".format(sys.argv[0])
     exit(1)
 
 out_dir = sys.argv[1]

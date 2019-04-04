@@ -2,7 +2,7 @@ import sys
 
 if len(sys.argv) != 6:
     print sys.argv
-    print "Usage: {} [Input File] [Profile file] [Profile] [Sample] [Output Directory]"
+    print "Usage: {} [Input File] [Profile file] [Profile] [Sample] [Output Directory]".format(sys.argv[0])
     exit(1)
 
 
