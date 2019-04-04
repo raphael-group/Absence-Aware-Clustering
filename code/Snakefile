@@ -98,7 +98,8 @@ rule run_pyclone:
             
 
 
-            nfiles=`wc -l $files` 
+            nfiles=`echo $files | wc -w` 
+            echo $nfiles
 
             if [[ $nfiles -lt 1 ]]; then
                 python handle-all-0.py {input.input} {input.partition} $profile {wildcards.outdir} 
