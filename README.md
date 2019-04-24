@@ -7,6 +7,7 @@ then merges the resulting set of clusters.
 
 ## Requirements
 - snakemake
+- python3 (to run snakemake)
 - python2
 - pyclone
 - gnu parallel
