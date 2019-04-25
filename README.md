@@ -1,4 +1,4 @@
-# Sparse Frequency Clustering
+# Absence-Aware Clustering
 
 ## Overview
 
