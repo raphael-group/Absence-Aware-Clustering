@@ -2,8 +2,11 @@
 
 ## Overview
 
-This code paritions mutations according to the samples that they are present in, runs a clustering algoritm on each partition,
-then merges the resulting set of clusters. 
+This algorithm is used to cluster mutations as a preprocessing step for tumor phylogenetic reconstruction. While it can be used in conjunction with any phylogenetic algorithm, it is particular effective in contexts where the reconstruction is sensitive to the presence and absence of clones in samples including:
+- Longitudinal data - [CALDER](https://github.com/raphael-group/calder)
+- Metastatic data - [MACHINA](https://github.com/raphael-group/machina)
+
+This code paritions mutations according to the samples that they are present in, runs a clustering algoritm on each partition, then merges the resulting set of clusters. 
 
 ## Requirements
 - snakemake
