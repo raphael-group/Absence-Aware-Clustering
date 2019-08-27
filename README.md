@@ -10,8 +10,7 @@ This code paritions mutations according to the samples that they are present in,
 
 ## Requirements
 - snakemake
-- python3 (to run snakemake)
-- python2
+- python3 
 - pyclone
 - gnu parallel
 
