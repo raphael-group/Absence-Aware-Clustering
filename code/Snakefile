@@ -34,7 +34,7 @@ rule partition:
     output:
         "{outdir}/partition.tsv"
     shell:
-        "python partition.py {input} {output}"
+        "python3 partition.py {input} {output}"
 
 
 rule create_input:
@@ -54,7 +54,7 @@ rule create_input:
 		{{
                 profile=$1
                 sample=$2
-		        python create_clustering_input.py {input.input} {input.partition} $profile $sample {wildcards.outdir} 
+		        python3 create_clustering_input.py {input.input} {input.partition} $profile $sample {wildcards.outdir} 
 		}}
         export -f create_profiles
 
@@ -102,7 +102,7 @@ rule run_pyclone:
             echo $nfiles
 
             if [[ $nfiles -lt 1 ]]; then
-                python handle-all-0.py {input.input} {input.partition} $profile {wildcards.outdir} 
+                python3 handle-all-0.py {input.input} {input.partition} $profile {wildcards.outdir} 
             else
 			    first_file=`grep -m1 $profile {input.filelist}`
 	            #nvalues=`echo $first_file | head -1 | xargs cat | awk 'length($0) > 0' | wc -l`
@@ -111,7 +111,7 @@ rule run_pyclone:
 	            if [[ $nvalues -gt 2 ]]; then
 	                bash run_pyclone.sh $profile {wildcards.outdir} {input.filelist} 
 	            else
-	                python create_singleton_cluster.py {wildcards.outdir} $profile $files
+	                python3 create_singleton_cluster.py {wildcards.outdir} $profile $files
 	            fi
             fi
 
@@ -136,5 +136,5 @@ rule merge_files:
     output:
         "{outdir}/cluster_assignments.txt"
     shell:
-        "python process_clusters.py {input.input} `cat {input.pyclone_out}` > {output}"
+        "python3 process_clusters.py {input.input} `cat {input.pyclone_out}` > {output}"
 

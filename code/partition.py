@@ -56,13 +56,13 @@ def partition_data(df, lam, eps, samples):
     return df_output[['character_index', 'profile']]
 
 if len(sys.argv) != 3:
-    print "Usage: {} [Input File] [Output Directory]"
+    print("Usage: {} [Input File] [Output Directory]")
 
 
 input_file = sys.argv[1]
 output_filename = sys.argv[2]
 
-print "Reading in data from:", input_file
+print("Reading in data from:", input_file)
 
 import pandas as pd
 from scipy.stats import binom
@@ -80,11 +80,11 @@ eps = 0.001
 
 df = pd.read_csv(input_file, sep = '\t', skiprows = 3)
 samples = df['#sample_index'].unique()
-print "PARTITION -- Found {} samples: {}".format(len(samples), samples)
+print("PARTITION -- Found {} samples: {}".format(len(samples), samples))
 df = partition_data(df, lam, eps, samples) 
 profiles = df['profile'].unique()
-print "PARTITION -- Found {} profiles: {}".format(len(profiles), profiles)
-print "PARTITION -- Writing out binary assignments to:", output_filename
+print("PARTITION -- Found {} profiles: {}".format(len(profiles), profiles))
+print("PARTITION -- Writing out binary assignments to:", output_filename)
 df.to_csv(output_filename, sep = '\t', index = False)
 
 

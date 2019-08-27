@@ -1,8 +1,8 @@
 import sys
 
 if len(sys.argv) != 6:
-    print sys.argv
-    print "Usage: {} [Input File] [Profile file] [Profile] [Sample] [Output Directory]".format(sys.argv[0])
+    print(sys.argv)
+    print("Usage: {} [Input File] [Profile file] [Profile] [Sample] [Output Directory]".format(sys.argv[0]))
     exit(1)
 
 
@@ -20,10 +20,10 @@ if profile_strip[sample] == '0':
 
 output_filename = "{}/{}/input.{}.tsv".format(out_dir, profile, sample)
 
-print "CLUSTERING INPUT -- Reading in data from:", input_file
-print "CLUSTERING INPUT -- Reading in profiles from:", input_file
-print "CLUSTERING INPUT -- Profile:", profile
-print "CLUSTERING INPUT -- Sample:", sample
+print("CLUSTERING INPUT -- Reading in data from:", input_file)
+print("CLUSTERING INPUT -- Reading in profiles from:", input_file)
+print("CLUSTERING INPUT -- Profile:", profile)
+print("CLUSTERING INPUT -- Sample:", sample)
 
 import pandas as pd
 
@@ -42,7 +42,7 @@ df['minor_cn'] = 1
 
 df_out = df[['mutation_id', 'ref_counts', 'var_counts', 'normal_cn', 'major_cn', 'minor_cn']]
 
-print "CLUSTERING INPUT -- Writing file to:", output_filename
+print("CLUSTERING INPUT -- Writing file to:", output_filename)
 df_out.to_csv(output_filename, sep = '\t', index = False)
 
 

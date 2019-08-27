@@ -22,5 +22,5 @@ for filename in input_files:
     for cluster in df['cluster_id'].unique():
         #print "------"
         #print filename
-        print ";".join(map(str, df[df['cluster_id'] == cluster]['character_label'].unique()))
+        print(";".join(map(str, df[df['cluster_id'] == cluster]['character_label'].unique())))
 

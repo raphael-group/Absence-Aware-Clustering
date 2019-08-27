@@ -1,7 +1,7 @@
 import sys
 
 if len(sys.argv) < 4:
-    print "Usage: {} [Output Directory] [Profile] [List of Input Files]".format(sys.argv[0])
+    print("Usage: {} [Output Directory] [Profile] [List of Input Files]".format(sys.argv[0]))
     exit(1)
 
 out_dir = sys.argv[1]
@@ -28,7 +28,7 @@ df = df[['mutation_id', 'sample_id', 'cluster_id', 'cellular_prevalence', 'cellu
 
 output_filename = "{}/{}/results.txt".format(out_dir, profile)
 
-print "SINGLETON CLUSTERING -- Writing file to:", output_filename
+print("SINGLETON CLUSTERING -- Writing file to:", output_filename)
 df.to_csv(output_filename, sep = '\t', index = False)
 
 

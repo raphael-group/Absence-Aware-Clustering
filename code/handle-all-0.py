@@ -2,7 +2,7 @@ import sys
 
 
 if len(sys.argv) != 5:
-    print "Usage: {} [Input File] [Partition File] [Profile] [Output Directory]".format(sys.argv[0])
+    print("Usage: {} [Input File] [Partition File] [Profile] [Output Directory]".format(sys.argv[0]))
     exit(1)
 
 
@@ -14,9 +14,9 @@ out_dir = sys.argv[4]
 profile_strip = profile.split('-')[-1]
 
 
-print "ALL-0 INPUT -- Reading in data from:", input_file
-print "ALL-0 INPUT -- Reading in profiles from:", input_file
-print "ALL-0 INPUT -- Profile:", profile
+print("ALL-0 INPUT -- Reading in data from:", input_file)
+print("ALL-0 INPUT -- Reading in profiles from:", input_file)
+print("ALL-0 INPUT -- Profile:", profile)
 
 import pandas as pd
 
@@ -45,7 +45,7 @@ df = df[['mutation_id', 'sample_id', 'cluster_id', 'cellular_prevalence', 'cellu
 
 output_filename = "{}/{}/results.txt".format(out_dir, profile)
 
-print "ALL-0 CLUSTERING -- Writing file to:", output_filename
+print("ALL-0 CLUSTERING -- Writing file to:", output_filename)
 df.to_csv(output_filename, sep = '\t', index = False)
 
 
